@@ -1,0 +1,283 @@
+| Category                | Questions                                                                                                                                     |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Users & Clients**     | - Who will call this service? Internal microservices, mobile apps, third-party clients?  <br>- Do we need API-key or OAuth2 authentication?   |
+| **Inbound Assets**      | - Which image formats do we accept (JPEG, PNG, WebP, TIFF, GIF…)?  <br>- Max file size per upload?  Total request size?                       |
+| **Transformations**     | - What operations must we support? Resize, crop, rotate, watermark, color-adjust, format conversion…?<br>- Are there presets or fully custom? |
+| **Performance & Scale** | - Will processing be synchronous (client waits) or async (background job)?<br>- Approximate QPS / bandwidth? Peak bursts?                     |
+| **Storage & CDN**       | - Where will originals and derivatives be stored? Local disk vs. AWS S3 vs. GCP?<br>- Will we front images with a CDN?                        |
+| **Caching & Reuse**     | - How long should we cache processed images?<br>- Do we need a Redis or in-memory cache for hot variants?                                     |
+| **API & URL Design**    | - What should our REST (or GraphQL) endpoints look like?<br>- URL scheme for on-the-fly transformations vs. presigned variants?               |
+| **Security & Limits**   | - File-type & size validation?<br>- Rate-limiting per IP or per API-key?<br>- Virus/malware scanning?                                         |
+| **Observability**       | - What metrics/traces/logs are critical?  <br>- Do we need success/failure dashboards, alerting (e.g. on error rates)?                        |
+| **Deployment & Infra**  | - Will this be containerized (Docker + Kubernetes)?<br>- What CI/CD pipeline do we already have?<br>- Any policy on external dependencies?    |
+| **Extensibility**       | - Future features: face-detection, automated thumbnails, video support?<br>- Plugin architecture for adding new filters?                      |
+
+
+Go through the following requirements and revise the plan:
+1. The user should be able to register and sign in. The endpoints will be called by third party clients. I need to use JWT authentication for securing the endpoint.
+2. We need to set the max file size upload in the config and support jpeg,jpg and png among other formats.
+3. Basic transformations like Resize, crop, rotate, watermark, color-adjust and certain filters like grayscale
+4. I want to implement the simple transformations like resize, crop etc with synchornous calls.
+5. All images will be stored in LOCAL with approriate directory structure
+6. WE can think about Redis in future
+7. We need to use rest api.
+8. Security is not a priority for now.
+9. Need to implement basic level of logging, that can help in debugging errors.
+10. Deployment and infra is basically local as this is a small project to learn about springboot
+
+
+========================================================================================================================
+ROADMAP:
+This project has five key tracks:
+
+1Environment & Project Setup
+2Authentication System (JWT)
+3Image Upload & Validation
+4Image Transformation Features
+5Logging, Testing, and Cleanup
+
+
+
+✅ TRACK 1: ENVIRONMENT & PROJECT SETUP
+🔹 Task 1.1: Create the Spring Boot Project
+Goal: Set up a basic Spring Boot app with the correct dependencies
+
+Mentorship Notes:
+
+Use Spring Initializr to generate the project.
+
+Use Maven or Gradle (your choice—but if you’re unsure, go with Maven).
+
+Choose Java 17+.
+
+Suggested dependencies:
+
+Spring Web
+
+Spring Security
+
+Spring Boot DevTools
+
+Lombok
+
+Spring Data JPA
+
+H2 or PostgreSQL (for now, H2 is easier)
+
+Validation
+
+👉 Your Task:
+Set up the project and run a simple "Hello, world" endpoint like GET /health returning OK. This ensures your app is wired correctly.
+
+🔹 Task 1.2: Set Up Local Database
+Goal: Use H2 database for dev/testing
+
+Mentorship Notes:
+
+H2 is great for learning and local dev—no external config.
+
+Later, you can switch to PostgreSQL if you want.
+
+Suggestions:
+
+Set up application.yml with proper datasource config
+
+Enable H2 console (so you can view the DB in the browser)
+
+Add a simple User entity to test schema generation
+
+👉 Your Task:
+Set up your H2 database and create a User entity + repository. Write a test endpoint to insert and fetch a dummy user.
+
+🔐 TRACK 2: AUTHENTICATION SYSTEM (JWT)
+🔹 Task 2.1: Implement User Registration
+Goal: Allow users to register with username + password
+
+Mentorship Notes:
+
+Store users in the database
+
+Use BCryptPasswordEncoder for password hashing (why not plain text?)
+
+Validate input (e.g. email format, password length)
+
+👉 Your Task:
+Implement POST /auth/register. On success, store the user and return a success message.
+
+🔹 Task 2.2: Implement Login & JWT Issuing
+Goal: Validate user credentials and return a signed JWT
+
+Mentorship Notes:
+
+Use a library like jjwt (Java JWT)
+
+JWT should contain basic claims like username, userId, and exp
+
+Secret key should be stored in application.yml or .env
+
+Suggestions:
+
+Create a JwtUtil or JwtService class
+
+Use OncePerRequestFilter to secure other endpoints
+
+👉 Your Task:
+Implement POST /auth/login to return a valid JWT on successful login.
+
+🔹 Task 2.3: Secure Endpoints
+Goal: Require JWT for image upload and processing routes
+
+Mentorship Notes:
+
+Allow unauthenticated access only to /auth/**
+
+Use @PreAuthorize or route-level filtering
+
+👉 Your Task:
+Secure GET /images and similar endpoints with JWT. Test with invalid/missing token.
+
+🖼️ TRACK 3: IMAGE UPLOAD & VALIDATION
+🔹 Task 3.1: Configure Max Upload Size
+Goal: Prevent oversized file uploads
+
+Mentorship Notes:
+
+Set max file size in application.yml
+
+Handle MultipartException with a global error handler
+
+👉 Your Task:
+Make sure the app rejects images over your configured max size. Return a friendly error message.
+
+🔹 Task 3.2: Support Allowed Image Formats
+Goal: Validate image MIME type & extension
+
+Mentorship Notes:
+
+Only allow .jpeg, .jpg, .png
+
+Check both extension and actual MIME type to avoid spoofing
+
+👉 Your Task:
+Reject unsupported file types with a meaningful error.
+
+🔹 Task 3.3: Implement Upload Endpoint
+Goal: Allow users to upload images
+
+Mentorship Notes:
+
+Store original images in a folder like /uploads/{userId}/{imageId}/original.jpg
+
+Generate a UUID for each image
+
+Optionally store metadata (name, format, size) in DB
+
+👉 Your Task:
+Implement POST /images/upload. Return a response with imageId and URL to access it later.
+
+🎨 TRACK 4: IMAGE TRANSFORMATION
+🔹 Task 4.1: Design a Transformation Spec
+Goal: Define a format for specifying transformations
+
+Suggestions:
+
+Use a JSON body like:
+
+json
+Copy
+Edit
+{
+  "type": "resize",
+  "width": 200,
+  "height": 300
+}
+👉 Your Task:
+Define a TransformationRequest DTO. Create a base controller structure like:
+
+bash
+Copy
+Edit
+POST /images/{id}/transform/resize
+🔹 Task 4.2: Implement Resize Operation
+Goal: Perform basic resizing on uploaded images
+
+Suggestions:
+
+Try Imgscalr first—it’s simple and works well with BufferedImage
+
+Save transformed image under:
+
+bash
+Copy
+Edit
+/uploads/{userId}/{imageId}/resize_200x300.jpg
+👉 Your Task:
+Implement image resizing, return the new image path or serve it directly.
+
+🔹 Task 4.3: Implement Crop, Rotate, Grayscale, Watermark
+Goal: Support other transformations one by one
+
+Mentorship Notes:
+
+You can handle them as separate endpoints or as part of a unified POST /images/{id}/transform with a type field
+
+Keep transformations modular—create a service layer with individual methods
+
+👉 Your Task:
+Implement these transformations one at a time. Test them using tools like Postman.
+
+🪵 TRACK 5: LOGGING, TESTING, CLEANUP
+🔹 Task 5.1: Add Basic Logging
+Goal: Help yourself debug issues
+
+Suggestions:
+
+Use @Slf4j (Lombok)
+
+Log:
+
+Who uploaded which image
+
+Errors during processing
+
+Transformation steps
+
+👉 Your Task:
+Add logs to major flows: registration, upload, transformation.
+
+🔹 Task 5.2: Add Tests
+Goal: Confirm your app works end to end
+
+Suggestions:
+
+Use MockMvc for integration tests
+
+Use @DataJpaTest for testing the DB layer
+
+👉 Your Task:
+Write one test for:
+
+User registration/login
+
+Image upload
+
+A successful transformation
+
+🔹 Task 5.3: Organize & Document
+Goal: Clean up the codebase
+
+Suggestions:
+
+Add README.md
+
+Create .gitignore
+
+Document endpoints briefly
+
+🔄 Your Next Step
+🎯 Your First Milestone: Set up the Spring Boot project and create a GET /health endpoint.
+
+Once you complete that, let me know and we’ll move to the next milestone together.
+
+If you're ever unsure how to implement a task, ask me how you'd go about X, and I’ll mentor you through it — not solve it outright.
+
