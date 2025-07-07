@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -30,6 +29,14 @@ public class FileStorageService {
     private ImageMetadataRepository imageMetadataRepository;
 
 
+    /**
+     * Saves the uploaded image to disk and metadata to the database.
+     *
+     * @param file     Multipart image file
+     * @param userName Username associated with the image
+     * @return UUID string of the stored image
+     * @throws IOException if file saving fails
+     */
     public String saveFile(MultipartFile file, String userName) throws IOException{
         if (file.isEmpty()){
             throw new IllegalArgumentException("File is empty");
@@ -37,8 +44,7 @@ public class FileStorageService {
 
         UUID uuidImage = UUID.randomUUID();
 
-        // Create the uploads directory if it doesn't exist
-        // Input location is FILE_DIR + USERNAME + UUID
+        // Create a directory: FILE_DIR/userName/uuid/
         Path path = Paths.get(FILE_DIR, userName, uuidImage.toString());
         File uploadDir = new File(path.toUri());
         if (!uploadDir.exists()) {
@@ -49,11 +55,10 @@ public class FileStorageService {
         Path filePath = Paths.get(String.valueOf(path), file.getOriginalFilename());
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        //Save Image metadata to db
         ImageMetadata newImage = ImageMetadata.builder()
                 .id(uuidImage)
                 .imageName(file.getOriginalFilename())
-                .storagePath(filePath.toString())
+                .inputPath(filePath.toString())
                 .userName(userName)
                 .build();
 
@@ -62,12 +67,32 @@ public class FileStorageService {
         return uuidImage.toString();
     }
 
-    public Resource getFile(String filename) throws MalformedURLException {
-        Path filePath = Paths.get(FILE_DIR, filename);
+    /**
+     * Retrieves the image as a Spring Resource.
+     *
+     * @param imageId UUID of the image
+     * @param type    "input" or "transform" image type
+     * @return image as a Resource
+     * @throws IOException if image not found
+     */
+    public Resource getFile(String imageId, String type) throws IOException {
+        Optional<ImageMetadata> imgMeta = imageMetadataRepository.findById(UUID.fromString(imageId));
+        if(imgMeta.isEmpty()){
+            throw new IOException("Image ID doesn't exist");
+        }
+        Path filePath = null;
+        if(type.equals("input")){
+            filePath = Paths.get(imgMeta.get().getInputPath());
+        } else if(type.equals("transform")){
+            filePath = Paths.get(imgMeta.get().getTransformPath());
+            if (filePath.toString().isEmpty()) {
+                throw new IOException("Transformed image not available");
+            }
+        }
         Resource resource = new UrlResource(filePath.toUri());
 
         if (!resource.exists()) {
-            throw new IllegalArgumentException("File is not present");
+            throw new IOException("File is not present");
         }
 
         return resource;

@@ -13,12 +13,15 @@ public class TransformRequestDto {
     private String format;
     private Filters filters;
 
-
+    @Getter
+    @Setter
     public static class Resize{
         private Integer width;
         private Integer height;
     }
 
+    @Getter
+    @Setter
     public static class Crop{
         private Integer width;
         private Integer height;
@@ -26,6 +29,8 @@ public class TransformRequestDto {
         private Integer y;
     }
 
+    @Getter
+    @Setter
     public static class Filters{
         private Boolean sepia;
         private Boolean grayscale;

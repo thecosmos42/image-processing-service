@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS image_proc;
+SET SCHEMA image_proc;
+
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     user_name VARCHAR(255) UNIQUE NOT NULL,

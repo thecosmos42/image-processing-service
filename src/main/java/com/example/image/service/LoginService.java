@@ -37,9 +37,7 @@ public class LoginService {
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Password is incorrect");
         }
-//        return "True";
-        String response = jwtUtils.generateToken(loginRequestDto.getUserName());
-        return response;
+        return jwtUtils.generateToken(loginRequestDto.getUserName());
 
     }
 }

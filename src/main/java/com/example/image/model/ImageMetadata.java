@@ -28,7 +28,9 @@ public class ImageMetadata {
 
     private String imageName;
 
-    private String storagePath;
+    private String inputPath;
+
+    private String transformPath;
 
     @CreationTimestamp
     @Column(updatable = false)
