@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest  // Uses in-memory DB and scans @Entity classes + JPA Repositories
+@DataJpaTest
 class UsersRepositoryTest {
 
     @Autowired

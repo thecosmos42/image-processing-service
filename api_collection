@@ -1,0 +1,255 @@
+type: collection.insomnia.rest/5.0
+name: Image Proc Service
+meta:
+  id: wrk_21e5ab13614f4a0c9e2c37518c7c31fe
+  created: 1749376827361
+  modified: 1751904635791
+  description: ""
+collection:
+  - url: localhost:8080/images/upload
+    name: Upload Image
+    meta:
+      id: req_3d4a5a74e8504dd8835ae6fc4c5589b5
+      created: 1749376827420
+      modified: 1751906219804
+      isPrivate: false
+      description: ""
+      sortKey: -1749376827420
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_08ef310f32a7443c8138948b83f9ced6
+          name: file
+          value: '"C:\Users\shith\Pictures\iPhone backup\IMG_4123"'
+          description: ""
+          disabled: false
+          type: file
+          fileName: D:\Tech\images\IMG_29351.jpg
+    parameters:
+      - id: pair_5d0c2c8c8d0e41628703999042c40514
+        name: ""
+        value: ""
+        description: ""
+        disabled: false
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+      - name: User-Agent
+        value: insomnia/11.2.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTdGV2ZSIsImV4cCI6MTc1MTk0MjE5MSwiaWF0IjoxNzUxOTA2MTkxfQ.HQTHzF0ZN4HKJPltdH6qr4ml5fioLm3TKHU2-t4ZhQo
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/auth/login
+    name: Login
+    meta:
+      id: req_44c4c03dc33a4c90826fb1220ce38336
+      created: 1750238539319
+      modified: 1751701743748
+      isPrivate: false
+      description: ""
+      sortKey: -1750238539319
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName":"Steve",
+        	"password":"thedogjumps20"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/auth/signup
+    name: Signup
+    meta:
+      id: req_5b66376a4aca42038334078964fd6442
+      created: 1751701586659
+      modified: 1751701733368
+      isPrivate: false
+      description: ""
+      sortKey: -1751701586659
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName":"Steve",
+        	"password":"thedogjumps20",
+        	"email":"steve.great@gmail.com"
+        	
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/images/download/input/d6369548-25f1-4085-91b1-5a07c234a058
+    name: Download Input Image
+    meta:
+      id: req_bf69d8447270467280a3137eceb41d55
+      created: 1751701763299
+      modified: 1751906349270
+      isPrivate: false
+      description: ""
+      sortKey: -1751701763299
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTdGV2ZSIsImV4cCI6MTc1MTkyODExMSwiaWF0IjoxNzUxODkyMTExfQ.Mx1fU6direvGXbJLA_T7RmSkK6IT5__ryJ-EATxYWkI
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/images/transform/d6369548-25f1-4085-91b1-5a07c234a058
+    name: Transform Image
+    meta:
+      id: req_d68f0a24955d448aa5c64f40358f61b6
+      created: 1751702674777
+      modified: 1751950612355
+      isPrivate: false
+      description: ""
+      sortKey: -1751702674777
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"crop": {
+              "width": "1920",
+              "height": "1080",
+              "x": "100",
+              "y": "0"
+            },
+        	"filters": {
+              "grayscale": true,
+              "sepia": false
+            },
+        	"rotate":0,
+        	"format":"jpg"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.2.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTdGV2ZSIsImV4cCI6MTc1MTk4NjYwMiwiaWF0IjoxNzUxOTUwNjAyfQ.12gYwVEttdpuuhIA2butrMYLmGhOA_4GDkA3NDb9B3M
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/images/download/input/d6369548-25f1-4085-91b1-5a07c234a058
+    name: Download Transform Image
+    meta:
+      id: req_ec64f38d679d403cae8b9f479bcec1db
+      created: 1751904578592
+      modified: 1751906940862
+      isPrivate: false
+      description: ""
+      sortKey: -1751904578592
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTdGV2ZSIsImV4cCI6MTc1MTkyODExMSwiaWF0IjoxNzUxODkyMTExfQ.Mx1fU6direvGXbJLA_T7RmSkK6IT5__ryJ-EATxYWkI
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8080/images?page=0&size=20
+    name: Get All Image Metadata
+    meta:
+      id: req_5080b8451c0d4d7e889f12fea6ab77df
+      created: 1751949752599
+      modified: 1751951830405
+      isPrivate: false
+      description: ""
+      sortKey: -1751949752599
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTdGV2ZSIsImV4cCI6MTc1MTk4NTc3NSwiaWF0IjoxNzUxOTQ5Nzc1fQ.CLCz5JD2MoP1XGwPJSUmO4WqEY7K_R2p2HszZJE8FL0
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_9ba66bd203fe13b513f48b9fdabb954d13ec0dbc
+    created: 1749376827376
+    modified: 1750324579568
+  cookies:
+    - key: JSESSIONID
+      value: 7F47B1C2DE7CFC8BED585C5EAC1C43E8
+      domain: localhost
+      path: /
+      httpOnly: true
+      hostOnly: true
+      creation: 2025-06-19T09:16:19.567Z
+      lastAccessed: 2025-06-19T09:16:19.567Z
+      id: c2ef7854-7210-4cdc-9b95-4f8bf8dcf250
+environments:
+  name: Base Environment
+  meta:
+    id: env_9ba66bd203fe13b513f48b9fdabb954d13ec0dbc
+    created: 1749376827371
+    modified: 1749376827371
+    isPrivate: false

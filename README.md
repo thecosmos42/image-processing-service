@@ -94,12 +94,12 @@ app.supported-formats=jpg,jpeg,png
 ## 🧪 Getting Started
 
 ```bash
-git clone https://github.com/your-username/image-processing-service.git
+git clone https://github.com/thecosmos42/image-processing-service.git
 cd image-processing-service
 ./mvnw spring-boot:run
 ```
 
-Use Postman/Insomnia or cURL to test the endpoints locally.
+Use Postman/Insomnia(import api_collection file) or cURL to test the endpoints locally
 
 ---
 
@@ -124,5 +124,6 @@ Authorization: Bearer <your-token>
 ## 📫 Feedback & Contributions
 
 Feel free to fork, play around, and open issues with ideas or bugs.
+https://roadmap.sh/projects/image-processing-service
 
 ---
