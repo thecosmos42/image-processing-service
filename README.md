@@ -1,23 +1,23 @@
-# 🖼️ Image Processing Service (Spring Boot)
+# 🖼️ Image Processing Service
 
-A minimal, extensible image processing API built with Spring Boot. Users can register, upload images, and apply transformations such as resizing, cropping, rotating, and grayscale filters. All files are stored locally with support for chained synchronous processing and JWT-based authentication.
+A minimal, extensible image processing API built with Spring Boot. Users can register, upload images, and apply transformations such as resizing, cropping, rotating, and filters. All files are stored locally with support for chained synchronous processing and JWT-based authentication.
 
 ---
 
 ## 🚀 Features
 
-- ✅ **User Registration & Login** with JWT Authentication
-- 📦 **Image Upload API** with size/format constraints (JPG, JPEG, PNG, etc.)
-- 🧱 **Synchronous Image Transformations**:
+- **User Registration & Login** with JWT Authentication
+- **Image Upload API** with size/format constraints (JPG, JPEG, PNG, etc.)
+- **Synchronous Image Transformations**:
   - Resize
   - Crop
   - Rotate
   - Grayscale / Sepia filters
   - Format conversion
-- 🗂️ **Local Storage** with organized folder structure per user/image
-- 📄 **RESTful API** design for easy integration with clients
-- 🪵 Basic **logging** for debugging and development
-- 🧪 Test locally — no deployment required
+- **Local Storage** with organized folder structure per user/image
+- **RESTful API** design for easy integration with clients
+- Basic **logging** for debugging and development
+- Test locally — no deployment required
 
 ---
 
@@ -28,8 +28,7 @@ uploads/
 └── {userId}/
     └── {imageId}/
         ├── original.jpg
-        ├── resize_300x200.jpg
-        └── transformed_grayscale_crop_100x100x10x10.jpg
+        ├── original_transform.jpg
 ```
 
 ---
@@ -64,6 +63,8 @@ uploads/
     }
    ```
 4. The server applies transformations synchronously and returns a path to the processed image.
+5. The input/transformed image can be downloaded using `GET /images/download/{type}/{imageId}`
+6. All images metadata processed by the client can be retrieved using `GET /images`
 
 ---
 
@@ -71,9 +72,9 @@ uploads/
 
 - **Java 17**
 - **Spring Boot**
-- **JWT (jjwt)** for authentication
+- **JWT** for authentication
 - **Lombok** for clean entity modeling
-- **BufferedImage / Graphics2S** for image processing
+- **BufferedImage / Graphics2D** for image processing
 - **Maven** for dependency management
 
 ---
@@ -114,7 +115,6 @@ Authorization: Bearer <your-token>
 
 ## 🧹 Future Enhancements
 
-- [ ] Redis-based caching for transformation results
 - [ ] Async processing for heavy tasks
 - [ ] Cloud storage support (S3, GCS)
 - [ ] Web UI for image previews
@@ -123,6 +123,6 @@ Authorization: Bearer <your-token>
 
 ## 📫 Feedback & Contributions
 
-This project is a solo learning journey. Feel free to fork, play around, and open issues with ideas or bugs. No PRs accepted yet, but happy to discuss!
+Feel free to fork, play around, and open issues with ideas or bugs.
 
 ---
