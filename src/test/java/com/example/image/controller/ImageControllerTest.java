@@ -18,10 +18,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ImageUploadController.class)
+@WebMvcTest(ImageController.class)
 @Import(ImageUploadControllerTestConfig.class)
 @AutoConfigureMockMvc(addFilters = false)
-class ImageUploadControllerTest {
+class ImageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

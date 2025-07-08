@@ -22,7 +22,6 @@ public class LoginController {
     public ResponseEntity<String> createLoginCred(@RequestBody Users user){
         String response = loginService.registerUser(user);
         return ResponseEntity.status(HttpStatus.OK).body(response);
-
     }
 
 

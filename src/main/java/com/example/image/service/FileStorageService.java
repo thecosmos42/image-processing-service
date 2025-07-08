@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -96,6 +98,23 @@ public class FileStorageService {
         }
 
         return resource;
+    }
+
+
+    /**
+     * Retrieves all the image metadata based on user
+     *
+     * @param userName username
+     * @param page    page parameters
+     * @return paginated response of ImageMetadata
+     * @throws IOException if image not found
+     */
+    public Page<ImageMetadata> getAllImageMetadataByUser(String userName, Pageable page) throws IOException {
+        Page<ImageMetadata> imgData = imageMetadataRepository.findAllByUserNameOrderByCreatedTsp(userName, page);
+        if(imgData.isEmpty()){
+            throw new IOException("User has no images uploaded");
+        }
+        return imgData;
     }
 
 }

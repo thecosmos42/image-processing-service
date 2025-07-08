@@ -10,10 +10,26 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
+/**
+ * Utility class providing image transformation operations
+ * such as crop, rotate, resize, filter, and format conversion.
+ *
+ * Each method reads the image from the file system, applies the transformation,
+ * and writes the result back to the same or a new file.
+ */
 @Slf4j
 @Component
 public class TransformUtils {
 
+    /**
+     * Crops the image based on the coordinates and size provided in the transform request.
+     *
+     * @param transformFilePath Path to the image file
+     * @param transformRequestDto DTO containing crop configuration
+     * @throws IOException if file read/write fails
+     * @throws IllegalArgumentException if crop size exceeds image bounds
+     */
     public void cropImage(String transformFilePath, TransformRequestDto transformRequestDto)
             throws IOException, IllegalArgumentException {
 
@@ -36,6 +52,13 @@ public class TransformUtils {
         ImageIO.write(cropImage,"jpg", new File(transformFilePath));
     }
 
+    /**
+     * Rotates the image by a specified number of degrees.
+     *
+     * @param transformFilePath Path to the image file
+     * @param transformRequestDto DTO containing rotation angle
+     * @throws IOException if file operations fail
+     */
     public void rotateImage(String transformFilePath, TransformRequestDto transformRequestDto)
             throws IOException {
         log.info("Rotating image by {}", transformRequestDto.getRotate());
@@ -49,6 +72,13 @@ public class TransformUtils {
         ImageIO.write(rotateImage,"jpg", new File(transformFilePath));
     }
 
+    /**
+     * Resizes the image to the specified width and height.
+     *
+     * @param transformFilePath Path to the image file
+     * @param transformRequestDto DTO containing new dimensions
+     * @throws IOException if file operations fail
+     */
     public void resizeImage(String transformFilePath, TransformRequestDto transformRequestDto)
             throws IOException{
 
@@ -64,6 +94,14 @@ public class TransformUtils {
         ImageIO.write(resizeImage,"jpg", new File(transformFilePath));
     }
 
+    /**
+     * Converts the image format (e.g., jpg to png) and updates the file path.
+     *
+     * @param transformFilePath Original file path
+     * @param transformRequestDto DTO containing target format
+     * @return New file path with updated format
+     * @throws IOException if file operations fail
+     */
     public String formatImage(String transformFilePath, TransformRequestDto transformRequestDto)
             throws IOException{
 
@@ -75,6 +113,13 @@ public class TransformUtils {
         return transformFilePath;
     }
 
+    /**
+     * Applies grayscale or sepia filter to the image based on request.
+     *
+     * @param transformFilePath Path to the image file
+     * @param transformRequestDto DTO containing filter settings
+     * @throws IOException if file operations fail
+     */
     public void filterImage(String transformFilePath, TransformRequestDto transformRequestDto)
             throws IOException{
 

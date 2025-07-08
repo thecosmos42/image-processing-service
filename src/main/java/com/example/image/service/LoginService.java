@@ -23,6 +23,12 @@ public class LoginService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    /**
+     * Registers a new user by encoding their password and saving the user object in the database.
+     *
+     * @param user The user object containing the raw (plaintext) password and other user details.
+     * @return A confirmation message upon successful registration.
+     */
     public String registerUser(Users user){
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
@@ -30,6 +36,14 @@ public class LoginService {
         return "User is registered";
     }
 
+    /**
+     * Validates a user's login credentials. If valid, returns a JWT token.
+     *
+     * @param loginRequestDto DTO containing username and password for login.
+     * @return A JWT token string upon successful authentication.
+     * @throws UsernameNotFoundException if the username is not found.
+     * @throws BadCredentialsException if the password does not match the stored hash.
+     */
     public String validateUser(LoginRequestDto loginRequestDto){
         Users user = userRepository.findByUserName(loginRequestDto.getUserName())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));

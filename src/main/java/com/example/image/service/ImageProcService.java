@@ -16,6 +16,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 
+/**
+ * Service class that handles image transformation operations
+ * such as resize, crop, rotate, filter, and format changes.
+ *
+ * It reads the original image, applies transformations based on user request,
+ * and stores the path to the transformed image in the database.
+ */
 @Service
 @Slf4j
 public class ImageProcService {
@@ -28,6 +35,15 @@ public class ImageProcService {
     private TransformUtils transformUtils;
 
 
+    /**
+     * Handles transformation requests for an image.
+     *
+     * @param uuidImage        the UUID string of the image to be transformed
+     * @param transformRequest the transformation instructions including resize, crop, rotate, etc.
+     * @return the file path to the transformed image
+     * @throws IOException              if the image is not found or an IO error occurs
+     * @throws IllegalArgumentException if the image metadata is not found
+     */
     public String transformImageHandler(String uuidImage, TransformRequestDto transformRequest)
             throws IOException, Exception {
 
