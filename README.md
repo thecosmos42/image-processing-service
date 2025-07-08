@@ -71,7 +71,8 @@ uploads/
 ## 🛠️ Tech Stack
 
 - **Java 17**
-- **Spring Boot**
+- **Spring Boot 3.5.0**
+- **PostgreSQL(pgAdmin 14)**
 - **JWT** for authentication
 - **Lombok** for clean entity modeling
 - **BufferedImage / Graphics2D** for image processing
