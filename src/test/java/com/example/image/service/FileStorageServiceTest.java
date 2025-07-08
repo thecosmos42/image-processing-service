@@ -1,6 +1,7 @@
 package com.example.image.service;
 
 import com.example.image.repository.ImageMetadataRepository;
+import com.example.image.utils.ImageValidationUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,9 @@ public class FileStorageServiceTest {
 
     @Mock
     private ImageMetadataRepository imageMetadataRepository;
+
+    @Mock
+    private ImageValidationUtils imageValidationUtils;
 
     @Test
     public void testGetFile_ImageNotFound_ThrowsIOException() {

@@ -4,6 +4,7 @@ import com.example.image.repository.ImageMetadataRepository;
 import com.example.image.security.JwtUtils;
 import com.example.image.service.FileStorageService;
 import com.example.image.service.ImageProcService;
+import com.example.image.utils.ImageValidationUtils;
 import com.example.image.utils.TransformUtils;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -35,5 +36,10 @@ public class ImageUploadControllerTestConfig {
     @Bean
     public TransformUtils transformUtils() {
         return Mockito.mock(TransformUtils.class);
+    }
+
+    @Bean
+    public ImageValidationUtils imageValidationUtils() {
+        return Mockito.mock(ImageValidationUtils.class);
     }
 }

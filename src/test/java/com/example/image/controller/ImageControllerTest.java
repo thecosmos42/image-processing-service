@@ -4,6 +4,7 @@ import com.example.image.dto.TransformRequestDto;
 import com.example.image.security.JwtUtils;
 import com.example.image.service.FileStorageService;
 import com.example.image.service.ImageProcService;
+import com.example.image.utils.ImageValidationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,6 +35,9 @@ class ImageControllerTest {
 
     @Autowired
     private ImageProcService imageProcService;
+
+    @Autowired
+    private ImageValidationUtils imageValidationUtils;
 
     @Test
     void testUploadImage_success() throws Exception {

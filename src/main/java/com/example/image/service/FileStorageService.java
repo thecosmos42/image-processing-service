@@ -2,6 +2,7 @@ package com.example.image.service;
 
 import com.example.image.model.ImageMetadata;
 import com.example.image.repository.ImageMetadataRepository;
+import com.example.image.utils.ImageValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,6 +21,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.image.constants.AppConstants.INPUT;
+import static com.example.image.constants.AppConstants.TRANSFORM;
+
 
 @Service
 public class FileStorageService {
@@ -30,6 +34,9 @@ public class FileStorageService {
     @Autowired
     private ImageMetadataRepository imageMetadataRepository;
 
+    @Autowired
+    private ImageValidationUtils imageValidationUtils;
+
 
     /**
      * Saves the uploaded image to disk and metadata to the database.
@@ -39,11 +46,9 @@ public class FileStorageService {
      * @return UUID string of the stored image
      * @throws IOException if file saving fails
      */
-    public String saveFile(MultipartFile file, String userName) throws IOException{
-        if (file.isEmpty()){
-            throw new IllegalArgumentException("File is empty");
-        }
+    public String saveFile(MultipartFile file, String userName) throws IOException, IllegalArgumentException{
 
+        imageValidationUtils.validate(file);
         UUID uuidImage = UUID.randomUUID();
 
         // Create a directory: FILE_DIR/userName/uuid/
@@ -83,14 +88,17 @@ public class FileStorageService {
             throw new IOException("Image ID doesn't exist");
         }
         Path filePath = null;
-        if(type.equals("input")){
+        if(type.equals(INPUT)){
             filePath = Paths.get(imgMeta.get().getInputPath());
-        } else if(type.equals("transform")){
+        } else if(type.equals(TRANSFORM)){
             filePath = Paths.get(imgMeta.get().getTransformPath());
             if (filePath.toString().isEmpty()) {
                 throw new IOException("Transformed image not available");
             }
+        } else{
+            throw new RuntimeException("Provide 'input' or 'transform' in URL for valid response");
         }
+
         Resource resource = new UrlResource(filePath.toUri());
 
         if (!resource.exists()) {
